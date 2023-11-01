@@ -1,0 +1,31 @@
+From 3efd44125a6f64fba786d08254e9d1bb6f08abde Mon Sep 17 00:00:00 2001
+From: Milind Changire <mchangir@redhat.com>
+Date: Sat, 4 Aug 2018 17:51:25 +0530
+Subject: [PATCH 2/2] add workaround for undefined ENOATTR
+
+define ENOATTR as ENODATA
+fixes bz#1610029
+
+Signed-off-by: Milind Changire <mchangir@redhat.com>
+---
+ xattr.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/xattr.c b/xattr.c
+index 2529e90..ac248cd 100644
+--- a/xattr.c
++++ b/xattr.c
+@@ -97,6 +97,10 @@ typedef int Py_ssize_t;
+    multi-operations */
+ #define ESTIMATE_ATTR_SIZE 256
+ 
++#if !defined(ENOATTR)
++#define      ENOATTR ENODATA
++#endif
++
+ typedef enum {T_FD, T_PATH, T_LINK} target_e;
+ 
+ typedef struct {
+-- 
+2.17.1
+
